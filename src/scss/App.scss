@@ -1,0 +1,204 @@
+@import './colors.scss';
+
+html {
+  font-size: 62.5%;
+}
+
+.App {
+  &__box {
+   // margin: 35px 0px 115px 75px;
+  //  background: linear-gradient(0deg, $red 60%, #fff 60%);
+    &--header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 35px;
+      img {
+        width: 330px;
+      }
+      h1 {
+          font-size: 6.2rem;
+          font-family: "Myriad Pro";
+          color: $gray;
+          line-height: 0.371;
+          font-weight: 400;
+          margin-top: 130px;
+          &:after {
+            content: '.';
+            color: $red;
+            position: absolute;
+          }
+      }
+    }
+
+    &--content {
+      overflow: hidden;
+      margin-top: 160px;
+      padding-top: 15px;
+      padding-left: 115px;
+      padding-bottom: 75px;
+      position: relative;
+    }
+  }
+}
+
+.Render {
+  &__box {
+    box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.1);
+    background-color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    position: relative;
+    z-index: 2;
+    &--background {
+      background-color: $red;
+      position: absolute;
+      min-height: 100vh;
+      width: 100%;
+      margin-top: 230px;
+      z-index: 1;
+      left: 0;
+      height: 100%;
+      }
+  }
+}
+
+.Products {
+width: 100%;
+margin: 50px;
+  &__row {
+    display: flex;
+    padding: 40px;
+    border-bottom: 1px solid #f3f3f4; 
+    &--image {
+      img {
+        width: 130px;
+        height: 130px;
+        object-fit: cover;
+        object-position: center;
+        box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.2);
+        border-radius: 15px;
+      }
+      padding-bottom: 50px;
+    }
+    &--description {
+      margin-left: 40px;
+      width: 100%;
+      border-right: 1px solid #f3f3f4; 
+      h2 {
+        color: #000;
+        font-size: 2.2rem;
+        font-weight: 400;
+        margin: 0;
+        margin-bottom: 35px;
+      }
+      p {
+        color: $gray-light;
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+    &--options {
+      display: flex;
+      align-items: center;
+      margin-left: 40px;
+      position: relative;
+      button {
+        border: 1px solid #dcdcdc;
+        background: transparent;
+        width: 37px;
+        height: 37px;
+      }
+      input {
+        border: none;
+        width: 37px;
+        height: 37px;
+        text-align: center;
+        margin: 0 5px;
+      }
+      p {
+        color: #000;
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 0;
+        margin-left: 50px;
+        display: flex;
+        span {
+          margin-left: 5px;
+        }
+      }
+      .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        img {
+          width: 20px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  &__price {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    p {
+      color: #000;
+      font-size: 3.6rem;
+      font-weight: 400;
+      margin: 0;
+      margin-left: 50px;
+      display: flex;
+      margin-top: 55px;
+      margin-bottom: 35px;
+      span {
+        margin-left: 5px;
+      }
+    }
+
+    button {
+      border: 1px solid #979797;
+        background-color: #d8d8d8;
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        color: #585858;
+        padding: 20px 60px;
+    }
+  }
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+  font-weight: 900;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
