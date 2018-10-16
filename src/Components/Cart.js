@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
-import icon_delete from './../img/delete.png';
-import Product from './Product';
+import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
 
+import Shipping from './Shipping'
+import Product from './Product';
 const API = 'http://5bbfa52072de1d00132537d3.mockapi.io/cart';
-const DEFAULT_QUERY = 'redux';
 
 class Cart extends Component {
-
-
   constructor(props) {
     super(props);
-
     this.state = {
       products: [],
       isLoading: false,
@@ -18,84 +15,68 @@ class Cart extends Component {
       classButtonIncrase: '',
       classButtonDecrase: '',
     }
-
-
   }
 
-
-
-
+  // Increment button 
   incrementQuantity = (event, id) => {
-    const personIndex = this.state.products.findIndex(p => {
+    const prodIndex = this.state.products.findIndex(p => {
       return p.id === id;
     });
-
+    // Copy array to not mutate
     const product = {
-      ...this.state.products[personIndex]
+      ...this.state.products[prodIndex]
     };
-
-    const test = "testowy";
-
-    if ((product.quantity >= 9) ) {
-      console.log("osiagnieto max");
+    // Condition checking the state of quantity + button state
+    if ((product.quantity >= 100)) {
       product.quantity++;
-      this.state.classButtonIncrase = test;
-      this.children = test;
-        
+      product.disabled = 'disabled';
     }
     else {
       product.quantity++;
-      this.state.classButtonDecrase = '';
+      product.disabled2 = '';
     }
-    
-    
-    console.log(product.quantity * product.price);
+    // Push new array
     const products = [...this.state.products];
-    products[personIndex] = product;
+    products[prodIndex] = product;
 
     this.setState({ products: products });
   }
-
   decrementQuantity = (event, id) => {
-    const personIndex = this.state.products.findIndex(p => {
+    const prodIndex = this.state.products.findIndex(p => {
       return p.id === id;
     });
-
+    // Copy array to not mutate
     const product = {
-      ...this.state.products[personIndex]
+      ...this.state.products[prodIndex]
     };
-
-    // Button state nad quantity decrement
-    if (product.quantity <= 1 ) {
-      console.log("osiagnieto min");
+    // Condition checking the state of quantity + button state
+    if (product.quantity <= 1) {
       product.quantity--;
-      this.state.classButtonDecrase = 'disabled';
+      product.disabled2 = 'disabled';
     }
     else {
       product.quantity--;
-      this.state.classButtonIncrase = '';
+      product.disabled = '';
     }
-
+    // Push new array
     const products = [...this.state.products];
-    products[personIndex] = product;
+    products[prodIndex] = product;
 
     this.setState({ products: products });
   }
-
+  // Delete single object in array
   delete = (index, e) => {
     const products = Object.assign([], this.state.products);
     products.splice(index, 1);
     this.setState({ products: products })
   }
-
   componentDidMount() {
-
+    // Fetching API + loading state/error
     this.setState({ isLoading: true });
-
     fetch(API)
       .then(response => {
         if (response.ok) {
-          console.log(response)
+
           return response.json();
         } else {
           throw new Error('Something went wrong ...');
@@ -103,26 +84,30 @@ class Cart extends Component {
       })
       .then(data => this.setState({ products: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
+  }
 
-
+  // Sum all products prices
+  priceSummary() {
+    let tab = this.state.products;
+    let sum = 0.00
+    for (let i = 0; i < tab.length; i++) {
+      sum += parseFloat(tab[i].price) * parseFloat(tab[i].quantity);
+    }
+    return sum;
   }
 
   render() {
-
-
-
+    //Render if waiting for API
     const { products, isLoading, error } = this.state;
     if (error) {
       return <p>{error.message}</p>;
     }
     if (isLoading) {
-      return <p>Loading ...</p>;
+      return <p>Loading...</p>;
     }
-
-
-
+   
     return (
-
+      // Product component map
       <div className="Products">
         {products.map((product, index) => {
           return <Product
@@ -132,34 +117,23 @@ class Cart extends Component {
             subtitle={product.subtitle}
             price={product.price}
             quantity={product.quantity}
-            end_price={product.price * product.quantity}
+            end_price={(parseFloat(product.price) * product.quantity).toFixed(2)}
             key={product.id}
-            classButtonIncrase={this.state.classButtonIncrase}
-            classButtonDecrase={this.state.classButtonDecrase}
+            classButtonIncrase={product.disabled}
+            classButtonDecrase={product.disabled2}
             increment={(event) => this.incrementQuantity(event, product.id)}
-            decrement={(event) => this.decrementQuantity(event, product.id)}  />
-            
+            decrement={(event) => this.decrementQuantity(event, product.id)} />
         }
-        
         )}
-
         <div className="Products__price">
           <p>
-            225 <span>€</span>
+           {parseFloat(this.priceSummary()).toFixed(2)} <span>€</span>
           </p>
-
-          <button>Buy</button>
-
-
+          
+          <Link to="/shipping">Buy</Link>
         </div>
-
       </div>
-      
-
     );
-
-    
   }
 }
-
 export default Cart;

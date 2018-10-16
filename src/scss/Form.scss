@@ -1,0 +1,16 @@
+.Form {
+  width: 100%;
+
+display: flex;
+
+align-self: baseline;
+  &__box {
+    margin: 40px;
+    &--row {
+      display: flex;
+      p {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
