@@ -33,7 +33,7 @@ class Shipping extends Component {
   setFreeShipping() {
     if (this.props.data.sum > 200) {
       for (var i = 0; i < this.state.shipping.length; i++) {
-        this.state.shipping[i][1] = 'free shipping';
+        this.state.shipping[i][1] = 'FREE SHIPPING';
       }
     }
   }
