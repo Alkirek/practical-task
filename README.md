@@ -1,7 +1,7 @@
 This is 7ninjas practical task for Frontend Developer coded with React.
 
 To run this project you must have installed node.js v6.3.1.
-ś
+
 ## How to run project
 
 In the project directory run:
