@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, Redirect } from "react-router-dom";
+import { Link }             from "react-router-dom";
+import Product              from './Product';
 
-import Shipping from './Shipping'
-import Product from './Product';
 const API = 'http://5bbfa52072de1d00132537d3.mockapi.io/cart';
 
 class Cart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: [],
-      isLoading: false,
-      error: null,
+      products:           [],
+      isLoading:          false,
+      error:              null,
       classButtonIncrase: '',
       classButtonDecrase: '',
-    }
+    };
   }
-
   // Increment button 
-  incrementQuantity = (event, id) => {
-    const prodIndex = this.state.products.findIndex(p => {
+  incrementQuantity = ( event, id ) => {
+    const prodIndex = this.state.products.findIndex( p => {
       return p.id === id;
     });
     // Copy array to not mutate
@@ -27,7 +25,7 @@ class Cart extends Component {
       ...this.state.products[prodIndex]
     };
     // Condition checking the state of quantity + button state
-    if ((product.quantity >= 100)) {
+    if (( product.quantity >= 100 )) {
       product.quantity++;
       product.disabled = 'disabled';
     }
@@ -36,12 +34,12 @@ class Cart extends Component {
       product.disabled2 = '';
     }
     // Push new array
-    const products = [...this.state.products];
+    const products      = [...this.state.products];
     products[prodIndex] = product;
 
-    this.setState({ products: products });
+    this.setState( { products: products } );
   }
-  decrementQuantity = (event, id) => {
+  decrementQuantity = ( event, id ) => {
     const prodIndex = this.state.products.findIndex(p => {
       return p.id === id;
     });
@@ -50,59 +48,59 @@ class Cart extends Component {
       ...this.state.products[prodIndex]
     };
     // Condition checking the state of quantity + button state
-    if (product.quantity <= 1) {
+    if ( product.quantity <= 1 ) {
       product.quantity--;
       product.disabled2 = 'disabled';
-    }
-    else {
+    } else {
       product.quantity--;
       product.disabled = '';
     }
     // Push new array
-    const products = [...this.state.products];
+    const products      = [ ...this.state.products ];
     products[prodIndex] = product;
-
-    this.setState({ products: products });
+    this.setState( { products: products } );
   }
   // Delete single object in array
-  delete = (index, e) => {
-    const products = Object.assign([], this.state.products);
-    products.splice(index, 1);
-    this.setState({ products: products })
+  delete = ( index, e ) => {
+    const products = Object.assign( [], this.state.products );
+    products.splice( index, 1 );
+    this.setState( { products: products } )
   }
   componentDidMount() {
     // Fetching API + loading state/error
-    this.setState({ isLoading: true });
+    this.setState( { isLoading: true } );
     fetch(API)
       .then(response => {
         if (response.ok) {
-
           return response.json();
         } else {
-          throw new Error('Something went wrong ...');
+          throw new Error('Something went wrong ...' + " Code: " + response.status);
         }
       })
       .then(data => this.setState({ products: data, isLoading: false }))
       .catch(error => this.setState({ error, isLoading: false }));
   }
-
   // Sum all products prices
   priceSummary() {
     let tab = this.state.products;
     let sum = 0.00
     for (let i = 0; i < tab.length; i++) {
-      sum += parseFloat(tab[i].price) * parseFloat(tab[i].quantity);
+      sum += parseFloat( tab[i].price ) * parseFloat( tab[i].quantity );
     }
     return sum;
   }
 
+  passVars() {
+    this.props.changeLink( { sum: this.priceSummary(), quantity: this.state.products.length } );
+  }
+  
   render() {
     //Render if waiting for API
     const { products, isLoading, error } = this.state;
-    if (error) {
+    if ( error ) {
       return <p>{error.message}</p>;
     }
-    if (isLoading) {
+    if ( isLoading ) {
       return <p>Loading...</p>;
     }
    
@@ -127,10 +125,11 @@ class Cart extends Component {
         )}
         <div className="Products__price">
           <p>
-           {parseFloat(this.priceSummary()).toFixed(2)} <span>€</span>
+           {parseFloat( this.priceSummary()).toFixed(2) } <span>€</span>
           </p>
           
-          <Link to="/shipping">Buy</Link>
+          <Link to="/shipping" onClick={ this.passVars.bind(this) } >Buy</Link>
+
         </div>
       </div>
     );

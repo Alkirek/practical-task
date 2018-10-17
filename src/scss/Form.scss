@@ -1,16 +1,98 @@
 .Form {
   width: 100%;
-
-display: flex;
-
-align-self: baseline;
+  display: flex;
+  align-self: baseline;
   &__box {
-    margin: 40px;
+    margin: 70px 100px;
+    width: 100%; 
+    max-width: 520px;
+
+    @media (max-width: 992px) {
+      margin: 30px 50px;
+    }
+
     &--row {
       display: flex;
-      p {
-        font-size: 1.8rem;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+   
+
+      @media (max-width: 680px) {
+        flex-direction: column;
+        align-items: baseline;
       }
+      p {
+        font-size: 2rem;
+        color: #000;
+        font-weight: 600;
+        min-width: 180px;
+        margin: 0;
+        @media (max-width: 680px) {
+          min-width: auto;
+        }
+      }
+      input, select {
+        max-width: 340px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #e9eef1;
+        margin-left: 10px;
+        @media (max-width: 680px) {
+          margin-left: 0px;
+        }
+        &.error {
+          border: 1px solid #cc1433;
+          +span {
+            display: block;
+          }
+        }
+        &.correct {
+          border: 1px solid #298ecb;
+        }
+      }
+      label {
+        width: 100%;
+        float: left;
+        display: inherit;
+        position: relative;
+        margin-bottom: 15px;
+        span {
+          display: none;
+          position: absolute;
+          bottom: -20px;
+          margin-left: 10px;
+          color: #cc1433;
+          font-size: 1.8rem;
+        }
+      }
+      
+    }
+    button {
+      border: 1px solid #dcdcdc;
+        background-color: #f2f2f2;
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        color: #c1c1c1;
+        padding: 20px 60px;
+        text-decoration: none;
+        float: right;
+        cursor: pointer;
+        @media (max-width: 992px) {
+          padding: 10px 40px;
+        }
+        @media (max-width: 767px) {
+          padding: 10px 30px;
+        }
+        @media (max-width: 680px) {
+          float: left;
+        }
+        &:disabled {
+          cursor: default;
+        }
     }
   }
 }
+

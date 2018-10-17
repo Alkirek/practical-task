@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-const API = 'http://5bbfa52072de1d00132537d3.mockapi.io/cart';
-
 class Shipping extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -11,115 +10,162 @@ class Shipping extends Component {
       error: null,
       classButtonIncrase: '',
       classButtonDecrase: '',
-    }
-  }
-
-  // Increment button 
-  incrementQuantity = (event, id) => {
-    const prodIndex = this.state.products.findIndex(p => {
-      return p.id === id;
-    });
-    // Copy array to not mutate
-    const product = {
-      ...this.state.products[prodIndex]
+      name: '',
+      address: '',
+      phone: '',
+      email: '',
+      shipping: [
+        ['ninjPost -', ' FREE SHIPPING'],
+        ['D7L -', ' 15.99 PLN'],
+        ['post -', ' 7.99 PLN']
+      ],
+      disabled: '',
+      buttonControl: '',
+      nameInputState: '',
+      addressInputState: '',
+      phoneInputState: '',
+      emailInputState: '',
     };
-    // Condition checking the state of quantity + button state
-    if ((product.quantity >= 100)) {
-      product.quantity++;
-      product.disabled = 'disabled';
-    }
-    else {
-      product.quantity++;
-      product.disabled2 = '';
-    }
-    // Push new array
-    const products = [...this.state.products];
-    products[prodIndex] = product;
 
-    this.setState({ products: products });
   }
-  decrementQuantity = (event, id) => {
-    const prodIndex = this.state.products.findIndex(p => {
-      return p.id === id;
-    });
-    // Copy array to not mutate
-    const product = {
-      ...this.state.products[prodIndex]
-    };
-    // Condition checking the state of quantity + button state
-    if (product.quantity <= 1) {
-      product.quantity--;
-      product.disabled2 = 'disabled';
-    }
-    else {
-      product.quantity--;
-      product.disabled = '';
-    }
-    // Push new array
-    const products = [...this.state.products];
-    products[prodIndex] = product;
 
-    this.setState({ products: products });
+  // Check cart price for free shipping
+  setFreeShipping() {
+    if (this.props.data.sum > 200) {
+      for (var i = 0; i < this.state.shipping.length; i++) {
+        this.state.shipping[i][1] = 'free shipping';
+      }
+    }
   }
-  // Delete single object in array
-  delete = (index, e) => {
-    const products = Object.assign([], this.state.products);
-    products.splice(index, 1);
-    this.setState({ products: products })
-  }
-  componentDidMount() {
-    // Fetching API + loading state/error
-    this.setState({ isLoading: true });
-    fetch(API)
-      .then(response => {
-        if (response.ok) {
+  //Check products quantity for disable NinjPost
+  checkNinjPost() {
+    if (this.props.data.quantity > 3) {
+      this.state.disabled = 'disabled'
+    } else {
 
-          return response.json();
-        } else {
-          throw new Error('Something went wrong ...');
-        }
+    }
+  }
+  // Event check all inputs
+  nameChangeHandler = (event) => {
+    if (event.target.name == 'name') {
+      this.setState({
+        name: event.target.value,
       })
-      .then(data => this.setState({ products: data, isLoading: false }))
-      .catch(error => this.setState({ error, isLoading: false }));
+    }
+    if (event.target.name == 'email') {
+      this.setState({
+        email: event.target.value,
+      })
+    }
+    if (event.target.name == 'phone') {
+      this.setState({
+        phone: event.target.value,
+      })
+    }
+    if (event.target.name == 'address') {
+      this.setState({
+        address: event.target.value,
+      })
+    }
   }
-
-  // Sum all products prices
-  priceSummary() {
-    let tab = this.state.products;
-   console.log(tab);
+  // Form inputs validation
+  checkName() {
+    if (this.state.name.match(/^([a-z]*[a-z]){3}[a-z]*$/) != null) {
+      this.state.nameInputState = "correct";
+      return true;
+    } else {
+      this.state.nameInputState = "error";
+      return false;
+    }
+  }
+  checkAddress() {
+    if (this.state.address != '') {
+      this.state.addressInputState = "correct";
+      return true;
+    } else {
+      this.state.addressInputState = "error";
+      return false;
+    }
+  }
+  checkPhone() {
+    if ((this.state.phone.match(/^\d{9}$/) != null) || (this.state.phone == '')) {
+      this.state.phoneInputState = "correct";
+      return true;
+    } else {
+      this.state.phoneInputState = "error";
+      return false;
+    }
+  }
+  checkEmail() {
+    if ((this.state.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/) != null) && (this.state.email != '')) {
+      this.state.emailInputState = "correct";
+      return true;
+    } else {
+      this.state.emailInputState = "error";
+      return false;
+    }
+  }
+  // Enable button if ala inputs true
+  checkButton() {
+    if (this.checkEmail() === false || this.checkPhone() === false || this.checkAddress() === false || this.checkName() === false) {
+      this.state.buttonControl = 'disabled';
+    } else {
+      this.state.buttonControl = '';
+    }
   }
 
   render() {
-    this.priceSummary();
+    this.checkName();
+    this.checkAddress();
+    this.checkPhone();
+    this.checkEmail();
+
+    this.checkNinjPost();
+    this.setFreeShipping();
+    this.checkButton();
 
     return (
 
       <div className="Form">
+
         <div className="Form__box">
           <div className="Form__box--row">
             <p>Name*</p>
-            <input type="text" value="" />
+            <input class={this.state.nameInputState} type="text" name="name" onChange={this.nameChangeHandler} />
           </div>
           <div className="Form__box--row">
             <p>Address*</p>
-            <input type="text" value="" />
+            <input class={this.state.addressInputState} type="text" name="address" onChange={this.nameChangeHandler} />
           </div>
           <div className="Form__box--row">
             <p>Phone</p>
-            <input type="text" value="" />
+            <input class={this.state.phoneInputState} type="text" name="phone" onChange={this.nameChangeHandler} />
           </div>
           <div className="Form__box--row">
             <p>E-mail</p>
-            <input type="text" value="" />
+            <label>
+            <input class={this.state.emailInputState} type="text" name="email" onChange={this.nameChangeHandler} />
+            <span>Invalid e-mail</span>
+            </label>
+          
           </div>
           <div className="Form__box--row">
             <p>Shipping options</p>
-            <input type="text" value="" />
+            <select id="shipping" >
+              <option disabled={this.state.disabled}>{this.state.shipping[0][0] + this.state.shipping[0][1]}</option>
+              <option>{this.state.shipping[1][0] + this.state.shipping[1][1]}</option>
+              <option>{this.state.shipping[2][0] + this.state.shipping[2][1]}</option>
+            </select>
+
           </div>
+          <button disabled={this.state.buttonControl}>PAY</button>
         </div>
+
       </div>
     );
+
   }
+
 }
 
 export default Shipping;
